@@ -1,0 +1,3 @@
+[2023-10-26 22:12:37] [ INFO ] [OdontologoDaoH2:41] Listado de odontologos[]
+[2023-10-26 22:14:07] [ INFO ] [OdontologoDaoH2:41] Listado de odontologos[]
+[2023-10-26 22:16:29] [ INFO ] [OdontologoDaoH2:41] Listado de odontologos[Odontologo{id=1, numeroMatricula='111', nombre='NICO', apellido='MORA'}, Odontologo{id=2, numeroMatricula='222', nombre='MONSE', apellido='GUZMAN'}]
