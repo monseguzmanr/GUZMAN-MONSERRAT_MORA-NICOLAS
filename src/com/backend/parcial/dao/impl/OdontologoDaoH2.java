@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OdontologoDaoH2 implements IDao<Odontologo> {
@@ -15,7 +16,58 @@ public class OdontologoDaoH2 implements IDao<Odontologo> {
 
     @Override
     public List<Odontologo> listAll() {
-        return null;
+
+        Connection connection = null;
+        List<Odontologo> odontologoList = new ArrayList<>();
+
+        try {
+
+            connection = H2Connection.getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT * FROM ODONTOLOGOS");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Odontologo odontologoPersistido = new Odontologo(
+                        rs.getInt("id"),
+                        rs.getInt("matricula"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido")
+                );
+
+                odontologoList.add(odontologoPersistido);
+            }
+
+            LOGGER.info("Listado de odontologos" +  odontologoList);
+
+        } catch (Exception e) {
+
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                    LOGGER.info("Tuvimos un problema");
+                    LOGGER.error(e.getMessage());
+                    e.printStackTrace();
+                } catch (SQLException exception) {
+                    LOGGER.error(exception.getMessage());
+                    exception.printStackTrace();
+                }
+            }
+
+        } finally {
+
+            try {
+                connection.close();
+            } catch (Exception ex) {
+                LOGGER.error("No se pudo cerrar la conexion: " + ex.getMessage());
+            }
+
+        }
+
+        return odontologoList;
     }
 
     @Override
